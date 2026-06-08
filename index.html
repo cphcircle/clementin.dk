@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elsker du også clementiner?</title>
+<meta name="description" content="En hjemmeside om clementiner. Det er det. Der kommer ikke mere.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- color ---- */
+    --paper:#F6F0E4; --panel:#EDE3D0; --card:#FFFCF6;
+    --ink:#241F18; --muted:#857A69; --line:#E2D8C5;
+    --orange:#F07F1A; --orange-d:#D86A0C; --flesh:#FBB264; --leaf:#3F7D4E;
+    --font:'Schibsted Grotesk',system-ui,-apple-system,sans-serif;
+
+    /* ---- type scale (base 18px) ---- */
+    --t-label:.8rem; --t-small:.9rem; --t-body:1rem; --t-lead:1.25rem;
+    --t-h2:1.75rem; --t-display:clamp(2.4rem,7vw,3.4rem); --t-mega:clamp(2.75rem,13vw,4.5rem);
+
+    /* ---- weight ---- */
+    --w-body:400; --w-med:500; --w-bold:700; --w-black:800; --w-display:900;
+
+    /* ---- spacing ---- */
+    --s-1:.5rem; --s-2:1rem; --s-3:1.5rem; --s-4:2rem; --s-5:3rem; --s-6:4.75rem; --s-7:6rem;
+
+    /* ---- radius ---- */
+    --r-sm:6px; --r-md:10px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--font);color:var(--ink);background:var(--paper);
+    font-size:18px;line-height:1.65;font-weight:var(--w-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:640px;margin:0 auto;padding:0 var(--s-3)}
+  p{margin:0}
+
+  /* hero */
+  header{padding:var(--s-7) 0 var(--s-5);text-align:center}
+  .mascot{width:104px;height:auto;display:block;margin:0 auto var(--s-3)}
+  h1{font-weight:var(--w-display);font-size:var(--t-display);line-height:1.05;letter-spacing:-.02em;margin:0}
+  .sub{font-weight:var(--w-med);color:var(--muted);font-size:var(--t-lead);margin:var(--s-2) 0 0}
+  .intro{max-width:500px;margin:var(--s-3) auto 0;color:var(--muted);font-size:var(--t-body)}
+
+  /* sections + rhythm bands */
+  section{padding:var(--s-6) 0;position:relative}
+  section.panel::before{content:"";position:absolute;top:0;bottom:0;left:50%;
+    transform:translateX(-50%);width:100vw;background:var(--panel);z-index:-1}
+  h2{font-weight:var(--w-black);font-size:var(--t-h2);letter-spacing:-.01em;margin:0 0 var(--s-4);
+    position:relative;padding-left:34px;line-height:1.1}
+  h2::before{content:"";position:absolute;left:0;top:.04em;width:24px;height:24px;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='14.5' r='8.5' fill='%23F07F1A'/%3E%3Cpath d='M12 6.5q4-3 7.5-1q-2.2 4.2-7.5 1z' fill='%233F7D4E'/%3E%3C/svg%3E") no-repeat center/contain}
+
+  /* facts */
+  .fact{font-size:var(--t-lead);font-weight:var(--w-med);line-height:1.5;min-height:4.5em;margin:0 0 var(--s-3);
+    display:flex;align-items:center;transition:opacity .2s}
+  .fact-no{display:block;font-weight:var(--w-med);color:var(--muted);font-size:var(--t-label);margin-top:var(--s-2)}
+
+  /* button */
+  .btn{font-family:var(--font);font-weight:var(--w-bold);font-size:var(--t-body);color:#fff;background:var(--ink);
+    border:none;border-radius:var(--r-sm);padding:13px 22px;cursor:pointer;transition:background .15s}
+  .btn:hover{background:var(--orange-d)}
+  .btn:active{transform:translateY(1px)}
+
+  /* game */
+  .clicker{text-align:center}
+  .stage{position:relative;display:inline-block}
+  .clem-btn{background:none;border:none;padding:0;cursor:pointer;display:block;line-height:0;-webkit-tap-highlight-color:transparent}
+  .clem-btn:active{transform:translateY(2px)}
+  .clem-svg{width:min(60vw,240px);height:auto;display:block}
+  .wedge{transition:transform .5s cubic-bezier(.32,1.18,.6,1),opacity .42s ease;transform-box:fill-box;transform-origin:center}
+  .plus{position:absolute;left:50%;top:30%;font-weight:var(--w-black);font-size:var(--t-lead);color:var(--orange-d);
+    pointer-events:none;animation:rise .85s ease-out forwards}
+  @keyframes rise{0%{opacity:1;transform:translate(-50%,0) scale(.7)}100%{opacity:0;transform:translate(-50%,-70px) scale(1.2)}}
+  .status{font-weight:var(--w-med);color:var(--muted);font-size:var(--t-body);min-height:1.6em;margin:var(--s-3) auto;max-width:440px;transition:opacity .25s}
+  .count{display:flex;flex-direction:column;align-items:center;gap:var(--s-1)}
+  .count .n{font-weight:var(--w-display);font-size:var(--t-mega);line-height:.9;letter-spacing:-.03em}
+  .count .n.bump{animation:bump .26s ease}
+  @keyframes bump{45%{transform:scale(1.13)}}
+  .count .lbl{font-weight:var(--w-med);color:var(--muted);font-size:var(--t-label);text-transform:uppercase;letter-spacing:.12em}
+
+  /* reviews summary */
+  .summary{display:flex;gap:var(--s-5);align-items:center;flex-wrap:wrap;
+    padding:0 0 var(--s-4);margin-bottom:var(--s-4);border-bottom:1px solid var(--line)}
+  .score{text-align:center;flex:0 0 auto}
+  .score .big{font-weight:var(--w-display);font-size:var(--t-display);line-height:.9;letter-spacing:-.03em}
+  .starbar{position:relative;display:inline-block;font-size:var(--t-lead);letter-spacing:3px;line-height:1;margin-top:var(--s-1)}
+  .starbar .bg{color:var(--line)}
+  .starbar .fg{position:absolute;left:0;top:0;color:var(--orange);overflow:hidden;white-space:nowrap}
+  .score .cnt{display:block;color:var(--muted);font-size:var(--t-small);margin-top:var(--s-1)}
+  .dist{flex:1 1 240px;min-width:220px;display:flex;flex-direction:column;gap:var(--s-1)}
+  .row{display:flex;align-items:center;gap:var(--s-2);font-size:var(--t-small);color:var(--muted)}
+  .row .k{width:34px;text-align:right;white-space:nowrap}
+  .row .k b{color:var(--ink);font-weight:var(--w-bold)}
+  .track{flex:1;height:9px;background:var(--line);border-radius:6px;overflow:hidden}
+  .fill{height:100%;background:var(--orange);width:0;transition:width .6s ease}
+  .row .v{width:18px;text-align:right}
+
+  /* review carousel */
+  #reviews{display:flex;gap:var(--s-3);overflow-x:auto;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;padding:4px 0 6px;scrollbar-width:none}
+  #reviews::-webkit-scrollbar{display:none}
+  .review{flex:0 0 320px;max-width:84vw;scroll-snap-align:start;
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:var(--s-3);display:flex;flex-direction:column}
+  .r-head{display:flex;flex-direction:column;gap:var(--s-1);margin-bottom:var(--s-2)}
+  .r-who b{font-weight:var(--w-black)}
+  .r-who span{color:var(--muted);font-weight:var(--w-med);font-size:var(--t-small)}
+  .stars{letter-spacing:2px;font-size:var(--t-lead);white-space:nowrap}
+  .stars .on{color:var(--orange)} .stars .off{color:var(--line)}
+  .review p{font-size:var(--t-body);line-height:1.6}
+  .car-ctrl{display:flex;align-items:center;gap:var(--s-2);margin-top:var(--s-3)}
+  .car-ctrl .hint{color:var(--muted);font-size:var(--t-small);margin-right:auto}
+  .car-ctrl button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+    background:var(--card);color:var(--ink);font-size:var(--t-lead);cursor:pointer;transition:background .15s,color .15s}
+  .car-ctrl button:hover{background:var(--ink);color:#fff}
+  .car-ctrl button:active{transform:translateY(1px)}
+
+  /* clementin-året */
+  .legend{display:flex;flex-wrap:wrap;gap:var(--s-2);margin:0 0 var(--s-3);font-size:var(--t-small);color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .legend i{width:13px;height:13px;border-radius:3px;display:inline-block}
+  .year-bars{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;align-items:end;height:130px}
+  .year-bars .bar{border-radius:3px 3px 0 0;min-height:4px}
+  .year-months{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;margin-top:var(--s-1)}
+  .year-months span{text-align:center;font-size:var(--t-label);color:var(--muted);font-weight:var(--w-med)}
+  .year-cap{color:var(--muted);font-size:var(--t-body);margin:var(--s-3) 0 0;max-width:520px}
+  .ph-blomst{background:#86C08F} .ph-vaekst{background:var(--leaf)}
+  .ph-modning{background:var(--flesh)} .ph-host{background:var(--orange)} .ph-hvile{background:var(--line)}
+
+  /* clementin-typer */
+  .types-lead{color:var(--muted);font-size:var(--t-body);margin:0 0 var(--s-4)}
+  .types{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s-3)}
+  .type{min-width:0;border:1px solid var(--line);border-radius:var(--r-md);padding:var(--s-3);background:var(--card)}
+  .type-head{display:flex;align-items:center;gap:var(--s-2);margin-bottom:var(--s-2)}
+  .type-ic{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:var(--paper);
+    display:flex;align-items:center;justify-content:center}
+  .type-ic svg{width:22px;height:22px;display:block}
+  .type h3{margin:0;font-size:var(--t-lead);font-weight:var(--w-black);line-height:1.1;overflow-wrap:anywhere}
+  .type .ess{margin:0 0 var(--s-2);color:var(--muted);font-size:var(--t-small);font-style:italic;line-height:1.45}
+  .type dl{margin:0}
+  .type dt{font-size:var(--t-label);text-transform:uppercase;letter-spacing:.1em;color:var(--orange-d);font-weight:var(--w-bold);margin-top:var(--s-2)}
+  .type dd{margin:2px 0 0;font-size:var(--t-small);line-height:1.5}
+  @media(max-width:540px){.types{grid-template-columns:1fr}}
+
+  /* clementine banner */
+  .banner{width:100vw;position:relative;left:50%;transform:translateX(-50%);
+    height:150px;background:var(--orange);overflow:hidden;display:block}
+  .banner svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  @media(max-width:520px){.banner{height:118px}}
+
+  /* footer */
+  footer{padding:var(--s-5) 0 var(--s-6);text-align:center;color:var(--muted);font-size:var(--t-small)}
+  footer p{margin:4px 0}
+  footer b{color:var(--ink);font-weight:var(--w-bold)}
+
+  @media (max-width:520px){.summary{gap:var(--s-3)}.score{flex:1 1 100%}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ===== HERO ===== -->
+  <header>
+    <svg class="mascot" viewBox="0 0 200 224" aria-hidden="true">
+      <ellipse cx="100" cy="196" rx="56" ry="8" fill="#241F18" opacity=".07"/>
+      <circle cx="100" cy="110" r="70" fill="#F07F1A"/>
+      <path d="M100 44 q2-10 0-16" fill="none" stroke="#5b3d22" stroke-width="4" stroke-linecap="round"/>
+      <path d="M101 33 q14-9 27-3 q-9 13-27 3z" fill="#3F7D4E"/>
+      <circle cx="82" cy="104" r="5.5" fill="#241F18"/>
+      <circle cx="118" cy="104" r="5.5" fill="#241F18"/>
+      <path d="M84 126 Q100 138 116 126" fill="none" stroke="#241F18" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    <h1>Elsker du også<br>clementiner?</h1>
+    <p class="sub">Ja. Selvfølgelig gør du det.</p>
+    <p class="intro">En hjemmeside om clementiner. Ikke mandariner, ikke appelsiner — clementiner. Her kan du skrælle en, lære alt for meget om dem og finde ud af, hvilken slags clementin-elsker du er. Det er hele konceptet. Der kommer ikke mere.</p>
+  </header>
+
+  <!-- ===== FACTS ===== -->
+  <section class="panel">
+    <h2>Alt om clementiner</h2>
+    <p class="fact" id="fact"></p>
+    <button class="btn" id="factBtn">Mere clementin viden</button>
+    <span class="fact-no" id="factNo"></span>
+  </section>
+
+  <!-- ===== GAME ===== -->
+  <section>
+    <h2>Skræl en clementin</h2>
+    <div class="clicker">
+      <div class="stage">
+        <button class="clem-btn" id="clem" aria-label="Skræl clementinen">
+          <svg class="clem-svg" viewBox="0 0 200 224" aria-hidden="true">
+            <ellipse cx="100" cy="196" rx="56" ry="8" fill="#241F18" opacity=".07"/>
+            <g id="flesh">
+              <circle cx="100" cy="110" r="70" fill="var(--flesh)"/>
+              <g stroke="var(--orange-d)" stroke-width="1.4" opacity=".55">
+                <line x1="100" y1="110" x2="100" y2="40"/><line x1="100" y1="110" x2="141" y2="53"/>
+                <line x1="100" y1="110" x2="167" y2="89"/><line x1="100" y1="110" x2="167" y2="131"/>
+                <line x1="100" y1="110" x2="141" y2="167"/><line x1="100" y1="110" x2="100" y2="180"/>
+                <line x1="100" y1="110" x2="59" y2="167"/><line x1="100" y1="110" x2="33" y2="131"/>
+                <line x1="100" y1="110" x2="33" y2="89"/><line x1="100" y1="110" x2="59" y2="53"/>
+              </g>
+              <circle cx="100" cy="110" r="6" fill="var(--orange-d)" opacity=".5"/>
+            </g>
+            <g id="skin"></g>
+            <path d="M100 44 q2-10 0-16" fill="none" stroke="#5b3d22" stroke-width="4" stroke-linecap="round"/>
+            <path d="M101 33 q14-9 27-3 q-9 13-27 3z" fill="var(--leaf)"/>
+            <g id="face">
+              <g id="brows" opacity="0" stroke="var(--ink)" stroke-width="3.4" stroke-linecap="round">
+                <line x1="72" y1="90" x2="88" y2="95"/><line x1="128" y1="90" x2="112" y2="95"/>
+              </g>
+              <circle cx="82" cy="104" r="5.5" fill="var(--ink)"/>
+              <circle cx="118" cy="104" r="5.5" fill="var(--ink)"/>
+              <path id="mouth" d="M84 126 Q100 138 116 126" fill="none" stroke="var(--ink)" stroke-width="4" stroke-linecap="round"/>
+              <path id="tear" d="M82 112 q4 9 0 14 q-4-5 0-14z" fill="#7FB0C4" opacity="0"/>
+            </g>
+          </svg>
+        </button>
+      </div>
+      <p class="status" id="status">Klik for at skrælle. Ti gange. Den bryder sig ikke om det.</p>
+      <div class="count" aria-live="polite">
+        <span class="n" id="count">0</span>
+        <span class="lbl">clementiner skrællet</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CLEMENTIN-ÅRET ===== -->
+  <section class="panel">
+    <h2>Clementin-året</h2>
+    <div class="legend">
+      <span><i class="ph-blomst"></i>Blomstring</span>
+      <span><i class="ph-vaekst"></i>Vækst</span>
+      <span><i class="ph-modning"></i>Modning</span>
+      <span><i class="ph-host"></i>Høst</span>
+    </div>
+    <div class="year-bars" aria-hidden="true">
+      <div class="bar ph-host" style="height:92%"></div>
+      <div class="bar ph-hvile" style="height:8%"></div>
+      <div class="bar ph-blomst" style="height:16%"></div>
+      <div class="bar ph-blomst" style="height:22%"></div>
+      <div class="bar ph-vaekst" style="height:34%"></div>
+      <div class="bar ph-vaekst" style="height:46%"></div>
+      <div class="bar ph-vaekst" style="height:58%"></div>
+      <div class="bar ph-vaekst" style="height:70%"></div>
+      <div class="bar ph-vaekst" style="height:80%"></div>
+      <div class="bar ph-modning" style="height:88%"></div>
+      <div class="bar ph-host" style="height:96%"></div>
+      <div class="bar ph-host" style="height:100%"></div>
+    </div>
+    <div class="year-months">
+      <span>jan</span><span>feb</span><span>mar</span><span>apr</span><span>maj</span><span>jun</span>
+      <span>jul</span><span>aug</span><span>sep</span><span>okt</span><span>nov</span><span>dec</span>
+    </div>
+    <p class="year-cap">Clementiner blomstrer om foråret, vokser hen over sommeren og høstes fra november til januar. Derfor smager julen af clementin.</p>
+  </section>
+
+  <!-- ===== CLEMENTIN-TYPER ===== -->
+  <section>
+    <h2>Hvilken clementin-elsker er du?</h2>
+    <p class="types-lead">Der findes seks slags. Du er nok mest én af dem.</p>
+    <div class="types">
+
+      <div class="type">
+        <div class="type-head"><span class="type-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#F07F1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="13" r="7"/><path d="M16 6c3 0 5 2 4 5"/></svg></span><h3>Skrælleren</h3></div>
+        <p class="ess">Skræller langsomt og grundigt. Processen betyder mere end resultatet.</p>
+        <dl>
+          <dt>Arbejde</dt><dd>Du er grundig og holder af faste rutiner. Kollegerne ved, hvad de får.</dd>
+          <dt>Kærlighed</dt><dd>Du tager dig god tid. Nogle finder det betryggende. Andre venter stadig.</dd>
+          <dt>Lidenskaber</dt><dd>Du nyder ting, der tager tid. Du har sikkert en hobby med mange små dele.</dd>
+        </dl>
+      </div>
+
+      <div class="type">
+        <div class="type-head"><span class="type-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#F07F1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a8 8 0 0 0 16 0z"/><path d="M12 10v8"/><path d="M8.2 10.5 9.7 17"/><path d="M15.8 10.5 14.3 17"/></svg></span><h3>Bådedeleren</h3></div>
+        <p class="ess">Deler altid. Den sidste båd er sjældent din egen.</p>
+        <dl>
+          <dt>Arbejde</dt><dd>Du er holdspiller og bliver værdsat for det. Husk også dig selv en gang imellem.</dd>
+          <dt>Kærlighed</dt><dd>Du giver meget. Det er en styrke. Det kan også blive en vane.</dd>
+          <dt>Lidenskaber</dt><dd>Du bliver glad, når andre bliver glade. Det er fint. Også lidt forudsigeligt.</dd>
+        </dl>
+      </div>
+
+      <div class="type">
+        <div class="type-head"><span class="type-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#F07F1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span><h3>Hamstreren</h3></div>
+        <p class="ess">Køber hele nettet. Spiser næsten alle. Næsten.</p>
+        <dl>
+          <dt>Arbejde</dt><dd>Du kan lide at have styr på tingene og planlægger gerne forud. Det går som regel godt.</dd>
+          <dt>Kærlighed</dt><dd>Du holder fast i det, du har kært. Det er smukt. Nogle gange en smule for fast.</dd>
+          <dt>Lidenskaber</dt><dd>Du går helhjertet ind i ting. Indtil du pludselig ikke gør mere.</dd>
+        </dl>
+      </div>
+
+      <div class="type">
+        <div class="type-head"><span class="type-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#F07F1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8z"/></svg></span><h3>Perfektionisten</h3></div>
+        <p class="ess">Fjerner alt det hvide. Hver eneste tråd. Det tager tid.</p>
+        <dl>
+          <dt>Arbejde</dt><dd>Du har høje standarder, også for dig selv. Det giver gode resultater og en og anden søvnløs nat.</dd>
+          <dt>Kærlighed</dt><dd>Du lægger mærke til detaljerne. Det er en gave. Den kan også være anstrengende.</dd>
+          <dt>Lidenskaber</dt><dd>Du gør tingene ordentligt eller slet ikke. Som regel ordentligt.</dd>
+        </dl>
+      </div>
+
+      <div class="type">
+        <div class="type-head"><span class="type-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#F07F1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M5.5 5.5l13 13M18.5 5.5l-13 13"/></svg></span><h3>Sæson-puristen</h3></div>
+        <p class="ess">Spiser kun clementiner i december. Resten af året venter du.</p>
+        <dl>
+          <dt>Arbejde</dt><dd>Du arbejder bedst, når tiden er til det. Du har en god fornemmelse for timing.</dd>
+          <dt>Kærlighed</dt><dd>Du tror på det rigtige øjeblik. Nogle gange skal det hjælpes lidt på vej.</dd>
+          <dt>Lidenskaber</dt><dd>Du holder af traditioner. De giver året en form.</dd>
+        </dl>
+      </div>
+
+      <div class="type">
+        <div class="type-head"><span class="type-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#F07F1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/></svg></span><h3>Den funktionelle</h3></div>
+        <p class="ess">Spiser clementinen. Ingen ceremoni. Den var der, og nu er den væk.</p>
+        <dl>
+          <dt>Arbejde</dt><dd>Du får tingene gjort uden meget postyr. Det bliver bemærket alligevel.</dd>
+          <dt>Kærlighed</dt><dd>Du gør ikke det store ud af det. Det betyder ikke, at det betyder mindre.</dd>
+          <dt>Lidenskaber</dt><dd>Du har dem sikkert. Du taler bare ikke så meget om dem.</dd>
+        </dl>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CLEMENTINE BANNER ===== -->
+  <div class="banner" aria-hidden="true" role="presentation">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="clemband" patternUnits="userSpaceOnUse" width="300" height="150">
+          <g transform="translate(80,72)">
+            <circle r="34" fill="#F6F0E4"/>
+            <path d="M0 -34 q2 -8 0 -14" fill="none" stroke="#2E6B3B" stroke-width="4" stroke-linecap="round"/>
+            <path d="M2 -44 q12 -8 24 -3 q-8 11 -24 3z" fill="#2E6B3B"/>
+          </g>
+          <g transform="translate(215,84)">
+            <circle r="27" fill="#F6F0E4" stroke="#D86A0C" stroke-width="2"/>
+            <g stroke="#D86A0C" stroke-width="1.6">
+              <line x1="-25" y1="0" x2="25" y2="0"/>
+              <line x1="-17.7" y1="-17.7" x2="17.7" y2="17.7"/>
+              <line x1="0" y1="-25" x2="0" y2="25"/>
+              <line x1="17.7" y1="-17.7" x2="-17.7" y2="17.7"/>
+            </g>
+            <circle r="3.4" fill="#D86A0C"/>
+          </g>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#clemband)"/>
+    </svg>
+  </div>
+
+  <!-- ===== REVIEWS ===== -->
+  <section class="panel">
+    <h2>Anmeldelser</h2>
+
+    <div class="summary">
+      <div class="score">
+        <div class="big" id="avg">–</div>
+        <div class="starbar"><span class="bg">★★★★★</span><span class="fg" id="avgStars">★★★★★</span></div>
+        <span class="cnt" id="cnt">0 anmeldelser</span>
+      </div>
+      <div class="dist" id="dist"></div>
+    </div>
+
+    <div id="reviews">
+      <div class="review" data-stars="2">
+        <div class="r-head">
+          <span class="r-who"><b>Preben</b>, <span>54, Aut. Revisor &amp; Perfektionist</span></span>
+        </div>
+        <p>«Jeg brugte 12 minutter og 43 sekunder på at fjerne alt det hvide stads (albedo, for de uindviede). Da jeg endelig var færdig, lignede clementinen et offer for et mislykket kirurgisk indgreb. Og gæt engang? Da jeg nåede til den fjerde båd, stødte jeg på en sten. Én sten i en angiveligt 'stenfri' frugt. Det er falsk markedsføring, og min aften var fuldstændig ødelagt. Den smagte dog okay. Men tilliden er brudt.»</p>
+      </div>
+      <div class="review" data-stars="1">
+        <div class="r-head">
+          <span class="r-who"><b>Sølvpapirshat_88</b>, <span>39, Fritænker</span></span>
+        </div>
+        <p>«VÅGN OP, FÅR! Har I nogensinde tænkt over, hvorfor de er så nemme at skrælle i forhold til appelsiner? Det er fordi regeringen har nanomodificeret skrællen, så de hurtigere kan sprede deres mind control-enzymer gennem vores slimhinder! Jeg købte et net i Netto, og min hund har gøet af dem uafbrudt i tre dage. Jeg giver den 1 stjerne, og det er kun fordi de passer perfekt ned i kaste-armen på min slangebøsse i fald samfundet kollapser.»</p>
+      </div>
+      <div class="review" data-stars="3">
+        <div class="r-head">
+          <span class="r-who"><b>Brian_Gains</b>, <span>24, Fitness-influencer</span></span>
+        </div>
+        <p>«Macros er jo helt til grin, bro. Nul protein, nul gains. Det er legit bare vand og simple kulhydrater. Jeg blendede fem af dem med min whey-protein (skovbær-smag), og det smagte af børnehave og bristede drømme. De giver et okay pre-workout pump, hvis du har glemt din kreatin, men lad os være ærlige: Du bliver ikke swole af at skrælle små orange bolde. Piller kun skrællen af for at træne grebsstyrken.»</p>
+      </div>
+      <div class="review" data-stars="4">
+        <div class="r-head">
+          <span class="r-who"><b>Luna</b>, <span>22, Kunsthistorie-studerende</span></span>
+        </div>
+        <p>«Clementinen er det perfekte spejlbillede på min eksistens. Umiddelbart frisk, nem at pille fra hinanden, fuld af usynlige lag, og bagefter efterlader den en permanent bitter lugt på dine fingre, som du ikke kan vaske af, uanset hvor meget du skrubber med din dyre Aesop-sæbe. Jeg spiste et helt net i går, mens jeg stirrede ind i min fugtskadede væg og lyttede til The Smiths. Det hjalp ikke på min husleje, men den melankolske syrlighed var et stærkt vibe.»</p>
+      </div>
+      <div class="review" data-stars="2">
+        <div class="r-head">
+          <span class="r-who"><b>Kirsten</b>, <span>61, Vinkender og Livsnyder</span></span>
+        </div>
+        <p>«Jeg forsøgte at parre denne 'clementin' (angiveligt fra Marokko, selvom jeg har mine stærke tvivl) med en årgangs-Riesling fra Alsace. En total katastrofe. Frugten mangler næse, kompleksitet og har en vulgær, næsten pøbelagtig sødme, der skriger af nissehuer og julekalendere fra et tysk supermarked. Den overfaldt min gane. Kan højst bruges som garniture i en fasan-stegning, hvis man har glemt at købe rigtige appelsiner.»</p>
+      </div>
+      <div class="review" data-stars="5">
+        <div class="r-head">
+          <span class="r-who"><b>Jule-Jørgen</b>, <span>48, Fanatisk Juleentusiast</span></span>
+        </div>
+        <p>«HVIS DU SPISER DEM I JULI, KOMMER JEG EFTER DIG! Clementiner er en hellig julespise. De skal indtages i december måned, mens du hører MC Einar på repeat og bløder fra tommelfingerneglene, fordi du allerede har skrællet femten stykker til din utaknemmelige, ipad-kiggende familie. Fantastisk frugt. Magisk aroma. Julen varer lige til påske, men hvis jeg ser dig købe et net clementiner i midten af maj måned, så ringer jeg simpelthen til politiet.»</p>
+      </div>
+    </div>
+    <div class="car-ctrl">
+      <span class="hint">Stryg for at læse flere</span>
+      <button id="rPrev" aria-label="Forrige anmeldelse">‹</button>
+      <button id="rNext" aria-label="Næste anmeldelse">›</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>Du er gæst nr. <b id="visitor">24.601</b>.</p>
+    <p><b>clementin.dk</b> — etableret i år, af kedsomhed.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- FACTS (sequential, so the finale lands last) ---------- */
+  var facts=[
+    'Clementiner er faktisk spiselige.',
+    'Hvis du skræller en clementin i badet, dufter hele badeværelset vildt dejligt.',
+    'Clementinen er en krydsning mellem en mandarin og en sød appelsin.',
+    'Farven på en clementin er – overraskende nok – orange.',
+    'De flyder i vand. Prøv at putte dem i badekarret!',
+    'Men hvis du piller skrællen af dem, synker de som en sten. Mind = blown.',
+    'De er normalt stenfri. Hvis du finder en sten, har du vundet i det botaniske lotteri (og ødelagt din tygning).',
+    'Det hvide stads under skrællen hedder "albedo" og er ikke giftigt, selvom det smager lidt af pap.',
+    'Man kan ikke betale med clementiner i Netto.',
+    'Clementiner indeholder meget C-vitamin. "C" står for Clementin (eller Citrus... nok Citrus).',
+    'De er opkaldt efter den franske munk Clément Rodier. Han fandt dem i Algeriet i 1902.',
+    'En gennemsnitlig clementin kan rulle mindst 3 meter, hvis du taber den på et stuegulv.',
+    'Hunde hader lugten af dem. Det er det perfekte våben mod tiggende kæledyr under julemiddagen.',
+    'Clementiner passer ikke ind i et cd-rom-drev. Prøv det IKKE.',
+    'At spise 100 clementiner på én gang giver dig ikke superkræfter, kun mega ondt i maven.',
+    'Clementinen har sit eget forsvarssystem: Hvis du trykker hårdt på skrællen, sprøjter den med æteriske olier i øjet på dig.',
+    'Skrællen kan bruges som pynt, men fungerer elendigt som musemåtte.',
+    'Ordet "clementin" kan ikke staves med tal (undtagen på MSN Messenger: cl3m3nt1n).',
+    'Hvis du spiser en clementin foran din computer, bliver dit tastatur klistret. Hver gang.',
+    'De bliver tit forvekslet med mandariner. Mandariner er dog sværere at pille og har irriterende sten.',
+    'Clementiner er generelt mindre end vandmeloner.',
+    'Det er ulovligt at kaste en clementin efter en politimand (fordi det tæller som vold, ikke på grund af frugten i sig selv).',
+    'De gror på træer. Ikke under jorden som kartofler.',
+    'Hvis man lader en clementin ligge i skoletasken indtil sommerferien, bliver den til en grøn, lodden bold.',
+    'Skrællen knirker sjovt, hvis man gnider den mod en vinduesrude.',
+    'En typisk clementin vejer mellem 50 og 80 gram.',
+    'Nogle mennesker spiser clementinerne uden at fjerne alt det hvide. Disse mennesker lever farligt.',
+    'Clementiner har små porer i skrællen, ligesom din næse.',
+    'De smager 100 gange bedre i december. Det er næsten videnskabeligt bevist.',
+    'Du kan jonglere med dem, men de splatter, hvis du griber for hårdt.',
+    'Der er ca. 8-14 både i en enkelt frugt. Tæl selv efter!',
+    'Det er umuligt at sige "clementin" tre gange hurtigt, mens du har en hel clementin i munden.',
+    'Den ældste overlevende clementin i verden findes ikke. De bliver spist eller rådner op.',
+    'De har ikke indbygget Wi-Fi eller Bluetooth.',
+    'En clementin formindsker ikke din gæld, men du bliver lidt gladere, mens du spiser den.',
+    'Du kan tørre skrællerne på radiatoren, så dufter hele værelset af hygge (og brandfare).',
+    'At pille skrællen af i ét langt stykke er det ultimative bevis på, at du er et overlegent menneske.',
+    'Spanien og Marokko producerer rigtig mange af dem.',
+    'Clementiner har ikke ben. Hvis din clementin bevæger sig, er der nok en edderkop under den.',
+    'Den absolut bedste måde at spise dem på, er at fjerne skrællen først. Bare et tip.',
+    'De smager slet ikke af kylling.',
+    'Hvis du stirrer intenst på en clementin i fem minutter, sker der absolut ingenting.',
+    'Man kan godt lave juice af dem, men det kræver vildt mange frugter for at fylde ét glas.',
+    'Skrællerne er biologisk nedbrydelige, men viceværten bliver stadig sur, hvis du smider dem i skolegården.',
+    'Den runde form gør dem aerodynamiske.',
+    'I gamle dage fik børn dem tit i julesokken, fordi slik åbenbart var for dyrt (eller folk var bare kedelige).',
+    'At presse en clementinbåd ind mellem læberne og tænderne, så det ligner et stort orange smil, er en joke, der aldrig bliver umoderne.',
+    'Tit har clementinbådene en lillebitte "babybåd" klistret fast på ryggen. Nåååh!',
+    'Der er ingen clementiner på Mars eller Månen.',
+    'Du har nu læst 50 fun facts om clementiner. Du er nu officielt en nørd. Velkommen i klubben! :-D'
+  ];
+  var factEl=document.getElementById('fact'),
+      factNo=document.getElementById('factNo'),
+      fi=0;
+  function showFact(){
+    factEl.style.opacity=0;
+    setTimeout(function(){
+      factEl.textContent=facts[fi];
+      factNo.textContent='nr. '+(fi+1)+' af '+facts.length;
+      factEl.style.opacity=1;
+    },150);
+  }
+  document.getElementById('factBtn').addEventListener('click',function(){
+    fi=(fi+1)%facts.length; showFact();
+  });
+  factEl.textContent=facts[0];
+  factNo.textContent='nr. 1 af '+facts.length;
+
+  /* ---------- GAME ---------- */
+  var SVGNS="http://www.w3.org/2000/svg";
+  var clem=document.getElementById('clem'),skin=document.getElementById('skin'),
+      stage=document.querySelector('.stage'),countEl=document.getElementById('count'),
+      statusEl=document.getElementById('status'),mouth=document.getElementById('mouth'),
+      brows=document.getElementById('brows'),tear=document.getElementById('tear');
+  var CX=100,CY=110,R=72,N=10;
+  var count=0, remaining=0, locked=false; /* nulstilles ved genindlæsning */
+  function setVisitor(){document.getElementById('visitor').textContent=(24601+count).toLocaleString('da-DK');}
+  countEl.textContent=count.toLocaleString('da-DK'); setVisitor();
+
+  function polar(a){return{x:CX+R*Math.cos(a),y:CY+R*Math.sin(a)};}
+  function buildSkin(){
+    skin.innerHTML=''; var start=-Math.PI/2, step=2*Math.PI/N;
+    for(var i=0;i<N;i++){
+      var a0=start+i*step,a1=start+(i+1)*step,p0=polar(a0),p1=polar(a1);
+      var d="M"+CX+" "+CY+" L"+p0.x.toFixed(1)+" "+p0.y.toFixed(1)+" A"+R+" "+R+" 0 0 1 "+p1.x.toFixed(1)+" "+p1.y.toFixed(1)+" Z";
+      var w=document.createElementNS(SVGNS,'path');
+      w.setAttribute('d',d);w.setAttribute('fill','var(--orange)');
+      w.setAttribute('stroke','var(--orange-d)');w.setAttribute('stroke-width','1.3');
+      w.setAttribute('class','wedge');w.dataset.mid=((a0+a1)/2).toFixed(4);
+      skin.appendChild(w);
+    }
+    remaining=N;
+  }
+  var MOUTHS={happy:"M84 126 Q100 138 116 126",neutral:"M86 130 L114 130",
+    worried:"M86 131 Q100 124 114 131",sad:"M86 134 Q100 120 114 134",cry:"M86 135 Q100 119 114 135"};
+  function setFace(s){mouth.setAttribute('d',MOUTHS[s]);
+    brows.style.opacity=(s==='worried'||s==='sad'||s==='cry')?1:0;
+    tear.style.opacity=(s==='cry')?1:0;}
+  function faceFor(p){return p<=0?'happy':p<=3?'neutral':p<=6?'worried':p<=9?'sad':'cry';}
+  var quips=["Skrællet. Tak for kampen.","Færdig. Den nåede ikke at sige farvel.",
+    "Endnu en. Den så det ikke komme.","Pillet. Helt og aldeles.","Sådan. Næste."];
+  var milestones={1:"Én skrællet. Den havde planer.",3:"Tre. Det er ikke et problem. Det er en hobby.",
+    5:"Fem. Hænderne lugter. Det ved du godt.",10:"Ti stykker. Det er rigeligt nu. Det er det ikke.",
+    25:"Femogtyve. Et helt net. Imponerende, og en smule bekymrende.",50:"Halvtreds. Gå udenfor. Tag en med.",
+    100:"Hundrede. Du er nu en del af clementinhistorien. Ingen vil huske det.",
+    250:"Tohundredeoghalvtreds. Selv Jule-Jørgen ville bede dig om at slappe af.",
+    500:"Femhundrede. Spillet er forbi. Du har vundet. (Det er det ikke.)"};
+  function setStatus(t){statusEl.style.opacity=0;setTimeout(function(){statusEl.textContent=t;statusEl.style.opacity=1;},150);}
+  function floatPlus(){var s=document.createElement('span');s.className='plus';s.textContent='+1';
+    stage.appendChild(s);setTimeout(function(){s.remove();},850);}
+  function peelOne(){
+    var wedges=skin.querySelectorAll('.wedge:not(.gone)');if(!wedges.length)return;
+    var w=wedges[Math.floor(Math.random()*wedges.length)];w.classList.add('gone');
+    var mid=parseFloat(w.dataset.mid),dx=Math.cos(mid)*64,dy=Math.sin(mid)*64;
+    w.style.transform='translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px) scale(.35) rotate('+(mid*30).toFixed(0)+'deg)';
+    w.style.opacity='0';setTimeout(function(){if(w.parentNode)w.parentNode.removeChild(w);},520);remaining--;
+  }
+  function finish(){
+    locked=true;setFace('cry');count++;
+    countEl.textContent=count.toLocaleString('da-DK');
+    countEl.classList.remove('bump');void countEl.offsetWidth;countEl.classList.add('bump');
+    floatPlus();setVisitor();
+    setStatus(milestones[count]||quips[Math.floor(Math.random()*quips.length)]);
+    setTimeout(function(){buildSkin();setFace('happy');locked=false;},760);
+  }
+  clem.addEventListener('click',function(){
+    if(locked||remaining<=0)return;peelOne();
+    var peeled=N-remaining;
+    if(remaining<=0)setTimeout(finish,420);else setFace(faceFor(peeled));
+  });
+  buildSkin();setFace('happy');
+
+  /* ---------- REVIEW SUMMARY (computed from the review blocks) ---------- */
+  var rs=[].slice.call(document.querySelectorAll('#reviews .review'));
+  var counts={1:0,2:0,3:0,4:0,5:0}, total=rs.length, sum=0;
+  rs.forEach(function(r){var s=parseInt(r.dataset.stars,10);counts[s]++;sum+=s;
+    var head=r.querySelector('.r-head');
+    var sp=document.createElement('span');sp.className='stars';
+    sp.innerHTML='<span class="on">'+'★'.repeat(s)+'</span><span class="off">'+'★'.repeat(5-s)+'</span>';
+    head.appendChild(sp);
+  });
+  var avg=total?sum/total:0;
+  document.getElementById('avg').textContent=avg.toLocaleString('da-DK',{minimumFractionDigits:1,maximumFractionDigits:1});
+  document.getElementById('avgStars').style.width=(avg/5*100)+'%';
+  document.getElementById('cnt').textContent=total+(total===1?' anmeldelse':' anmeldelser');
+  var maxC=Math.max(1,counts[1],counts[2],counts[3],counts[4],counts[5]);
+  var dist=document.getElementById('dist');
+  for(var s=5;s>=1;s--){
+    var row=document.createElement('div');row.className='row';
+    row.innerHTML='<span class="k"><b>'+s+'</b> ★</span><span class="track"><span class="fill"></span></span><span class="v">'+counts[s]+'</span>';
+    dist.appendChild(row);
+    (function(fill,c){setTimeout(function(){fill.style.width=(c/maxC*100)+'%';},60);})(row.querySelector('.fill'),counts[s]);
+  }
+  /* ---------- REVIEW CAROUSEL controls ---------- */
+  var rv=document.getElementById('reviews');
+  function step(){var c=rv.querySelector('.review');return c?c.getBoundingClientRect().width+18:340;}
+  document.getElementById('rPrev').addEventListener('click',function(){rv.scrollBy({left:-step(),behavior:'smooth'});});
+  document.getElementById('rNext').addEventListener('click',function(){rv.scrollBy({left:step(),behavior:'smooth'});});
+})();
+</script>
+</body>
+</html>
